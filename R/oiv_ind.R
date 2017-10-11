@@ -123,6 +123,9 @@ oiv_ind<-function (daily_Tn=NULL,daily_Tx=NULL,daily_Tm=NULL, daily_P=NULL, firs
     
     
     # checks S or N emisphere (T in July <> T in Jaunary) and sets periods
+    if(is.na(colMeans(as.data.frame(daily_Tm[daily_Tm$month==1,-(1:3)]), na.rm=T)) | is.na(colMeans(as.data.frame(daily_Tm[daily_Tm$month==7,-(1:3)]), na.rm=T)) ) {
+      Tm_veg=NA;winkler_mean=NA;BEDD_mean=NA;HI_mean=NA;CNI_mean=NA;FSI_mean=NA;BI_mean=NA;Tn_rest_quantile=NA;Tn_veg_quantile=NA;Tx_veg_quantile=NA }else{
+    
     S_emisph <- mean(colMeans(as.data.frame(daily_Tm[daily_Tm$month==1,-(1:3)]), na.rm=T), na.rm=T) > mean(colMeans(as.data.frame(daily_Tm[daily_Tm$month==7,-(1:3)]), na.rm=T), na.rm=T)
     if(S_emisph) index_months<-c(10:12, 1:4) else index_months<-4:10
     
@@ -312,6 +315,7 @@ oiv_ind<-function (daily_Tn=NULL,daily_Tx=NULL,daily_Tm=NULL, daily_P=NULL, firs
       Tx_veg_quantile<-round(apply(Tx_veg_table, FUN=quantile, probs=quant_Tx_veg, MARGIN=2)[-1],1)
     } else Tx_veg_quantile<-rep(NA,length(daily_Tm)-3)
     
+   }
     # creates a general table
     oiv_indic_table<-cbind(Tm_veg,winkler_mean,BEDD_mean,HI_mean,CNI_mean,FSI_mean,BI_mean,Tn_rest_quantile,Tn_veg_quantile,Tx_veg_quantile)
     colnames(oiv_indic_table)<-c("Tm_veg", "WI", "BEDD", "HI", "CNI", "FSI", "BI", "Tn_rest", "Tn_veg", "Tx_veg")
